@@ -1,0 +1,13 @@
+{
+    "name": "tomwilford/lorem-docsum",
+    "autoload": {
+        "psr-4": {
+            "TomWilford\\LoremDocsum\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "process-timeout": 0
+    },
+    "require": {}
+}
