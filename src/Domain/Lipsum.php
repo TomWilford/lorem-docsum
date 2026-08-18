@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TomWilford\LoremDocsum\Domain;
 
+use SplFileObject;
+
 class Lipsum
 {
     public string $lineOne = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquam eget erat quis fermentum. Morbi vulputate tortor a ex vulputate fringilla. Pellentesque convallis condimentum dignissim. Phasellus ultrices lorem vitae cursus commodo. Vestibulum consectetur viverra sem id pulvinar. Maecenas vel erat ac ipsum dignissim malesuada. In faucibus velit sit amet ex lobortis pellentesque. Aenean hendrerit tristique dui eget finibus. Suspendisse ultricies finibus nisl, non ornare neque ultrices in.';
@@ -47,5 +49,10 @@ class Lipsum
             . $this->lineTwelve
             . PHP_EOL
             . $this->lineThirteen;
+    }
+
+    public function getImage(): SplFileObject
+    {
+        return new SplFileObject(dirname(__DIR__, 2) . '/assets/image.png', 'r');
     }
 }

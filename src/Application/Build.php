@@ -26,7 +26,7 @@ class Build
         }
     }
 
-    public function megabytesToBytes(float $targetSize): float
+    private function megabytesToBytes(float $targetSize): float
     {
         return $targetSize * 1024 * 1024;
     }
