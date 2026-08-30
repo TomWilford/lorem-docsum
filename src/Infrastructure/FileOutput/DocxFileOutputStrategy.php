@@ -29,7 +29,7 @@ class DocxFileOutputStrategy implements FileOutputStrategy
     public function write(): void
     {
         $section = $this->fileHandle->getSection(0);
-        $section->addText(
+        $section?->addText(
             $this->contentProvider->getContent()
         );
     }

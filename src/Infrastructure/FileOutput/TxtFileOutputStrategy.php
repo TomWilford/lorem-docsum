@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TomWilford\LoremDocsum\Infrastructure\FileOutput;
 
-use Faker\Factory;
 use SplFileObject;
 use TomWilford\LoremDocsum\Infrastructure\ContentProvider\ContentProvider;
 

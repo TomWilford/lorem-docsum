@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TomWilford\LoremDocsum\Application;
 
-use Faker\Factory;
 use Faker\Generator;
 use TomWilford\LoremDocsum\Domain\FileOutputType;
 use TomWilford\LoremDocsum\Domain\State;
 use TomWilford\LoremDocsum\Infrastructure\ContentProvider\ContentProvider;
-use TomWilford\LoremDocsum\Infrastructure\ContentProvider\FakerContentProvider;
 use TomWilford\LoremDocsum\Infrastructure\FileOutput\FileOutputStrategy;
 use TomWilford\LoremDocsum\Infrastructure\Responder\Responder;
 
@@ -19,7 +19,8 @@ class BuildAction
     public function __construct(
         private readonly Responder $responder,
         private readonly Generator $faker,
-        private readonly ContentProvider $contentProvider
+        private readonly ContentProvider $contentProvider,
+        private string $targetDirectory = '',
     ) {
     }
 
@@ -40,7 +41,10 @@ class BuildAction
 
     private function init(int $targetBytes, FileOutputType $outputType): State
     {
-        $outputName = $this->faker->words(rand(1, 3), true) . $outputType->extension();
+        $outputName = $this->targetDirectory
+            // @phpstan-ignore cast.string
+            . (string) $this->faker->words(rand(1, 3), true)
+            . $outputType->extension();
         $this->responder->respond(sprintf('Writing %s', $outputName));
 
         $this->outputStrategy = $outputType->getOutputStrategy($this->contentProvider);
