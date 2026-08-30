@@ -43,7 +43,7 @@ class BuildAction
     {
         $outputName = $this->targetDirectory
             // @phpstan-ignore cast.string
-            . (string) $this->faker->words(rand(1, 3), true)
+            . (string)$this->faker->words(rand(1, 3), true)
             . $outputType->extension();
         $this->responder->respond(sprintf('Writing %s', $outputName));
 
