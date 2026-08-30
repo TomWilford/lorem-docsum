@@ -1,5 +1,11 @@
 <?php
 
+use Faker\Factory;
+use TomWilford\LoremDocsum\Application\BuildAction;
+use TomWilford\LoremDocsum\Domain\FileOutputType;
+use TomWilford\LoremDocsum\Infrastructure\ContentProvider\FakerContentProvider;
+use TomWilford\LoremDocsum\Infrastructure\Responder\TerminalResponder;
+
 include dirname(__DIR__ ) . '/vendor/autoload.php';
 
 $shortOptions = 's:'; // Size
@@ -9,13 +15,14 @@ $longOptions = [
     'type::'
 ];
 
+$responder = new TerminalResponder();
+
 if ($argc === 1) {
-    print(<<<OUT
+    $responder->respond(<<<OUT
     Lorem Docsum - Generate lorem ipsum files
     -------------------------------------------------
     -s (--size) = Size of file (MB) - required
     -t (--type) = Type of file to output [txt,docx]
-
     OUT);
 
     exit;
@@ -24,10 +31,27 @@ if ($argc === 1) {
     $size = $options['s'] ?? $options['size'] ?? null;
     $type = $options['t'] ?? $options['type'] ?? 'txt';
 
+    if (empty($size)) {
+        $responder->respond('Size is required in MB');
+    }
+    $size = (int) $size * 1024 * 1024;
 
-    $app = new \TomWilford\LoremDocsum\Application\Build();
+    $type = FileOutputType::tryFrom($type);
+    if (empty($type)) {
+        $responder->respond('Type not recognised. Defaulting to txt.');
+        $type = FileOutputType::TXT;
+    }
 
-    $app->execute($size, $type);
+    $faker = Factory::create();
+    $contentProvider = new FakerContentProvider($faker);
+
+    $app = new BuildAction(
+        responder: $responder,
+        faker: $faker,
+        contentProvider: $contentProvider
+    );
+
+    $app->run($size, $type);
 }
 
 

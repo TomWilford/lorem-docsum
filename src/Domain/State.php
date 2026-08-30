@@ -7,6 +7,5 @@ enum State
     case IDLE;
     case WRITING;
     case CHECKING;
-    case TARGET_REACHED;
     case COMPLETE;
 }
