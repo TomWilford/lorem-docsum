@@ -5,7 +5,7 @@ Lorem Ipsum but for documents.
 
 Treat yourself to a document with some dummy text in it.
 
-The original intention for this is to be used as a script to generate documents, but, you can
+The original intention for this is to be used as a script to generate documents, but, you
 can also install and use it in your own projects via composer.
 
 ## Terminal Usage Instructions
