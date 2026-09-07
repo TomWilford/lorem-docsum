@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TomWilford\LoremDocsum\Infrastructure\FileOutput;
+namespace TomWilford\LoremDocsum\Infrastructure\FileOutputStrategy\Interface;
 
 interface FileOutputStrategy
 {

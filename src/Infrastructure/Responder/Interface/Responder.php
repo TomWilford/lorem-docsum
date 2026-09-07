@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TomWilford\LoremDocsum\Infrastructure\Responder;
+namespace TomWilford\LoremDocsum\Infrastructure\Responder\Interface;
 
 interface Responder
 {

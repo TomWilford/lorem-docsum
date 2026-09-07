@@ -7,9 +7,9 @@ namespace TomWilford\LoremDocsum\Application;
 use Faker\Generator;
 use TomWilford\LoremDocsum\Domain\FileOutputType;
 use TomWilford\LoremDocsum\Domain\State;
-use TomWilford\LoremDocsum\Infrastructure\ContentProvider\ContentProvider;
-use TomWilford\LoremDocsum\Infrastructure\FileOutput\FileOutputStrategy;
-use TomWilford\LoremDocsum\Infrastructure\Responder\Responder;
+use TomWilford\LoremDocsum\Infrastructure\FileOutputStrategy\Interface\FileOutputStrategy;
+use TomWilford\LoremDocsum\Infrastructure\FileOutputStrategy\Factory\FileOutputStrategyFactory;
+use TomWilford\LoremDocsum\Infrastructure\Responder\Interface\Responder;
 
 class BuildAction
 {
@@ -19,7 +19,7 @@ class BuildAction
     public function __construct(
         private readonly Responder $responder,
         private readonly Generator $faker,
-        private readonly ContentProvider $contentProvider,
+        private readonly FileOutputStrategyFactory $fileOutputTypeFactory,
         private string $targetDirectory = '',
     ) {
     }
@@ -47,7 +47,7 @@ class BuildAction
             . $outputType->extension();
         $this->responder->respond(sprintf('Writing %s', $outputName));
 
-        $this->outputStrategy = $outputType->getOutputStrategy($this->contentProvider);
+        $this->outputStrategy = $this->fileOutputTypeFactory->create($outputType);
         $this->outputStrategy->init(
             outputName: $outputName,
             targetBytes: $targetBytes

@@ -3,8 +3,11 @@
 use Faker\Factory;
 use TomWilford\LoremDocsum\Application\BuildAction;
 use TomWilford\LoremDocsum\Domain\FileOutputType;
-use TomWilford\LoremDocsum\Infrastructure\ContentProvider\FakerContentProvider;
-use TomWilford\LoremDocsum\Infrastructure\Responder\TerminalResponder;
+use TomWilford\LoremDocsum\Domain\LargeTextProvider;
+use TomWilford\LoremDocsum\Infrastructure\ChunkEstimator\Factory\ChunkEstimatorFactory;
+use TomWilford\LoremDocsum\Infrastructure\ContentProvider\Concrete\FakerContentProvider;
+use TomWilford\LoremDocsum\Infrastructure\FileOutputStrategy\Factory\FileOutputStrategyFactory;
+use TomWilford\LoremDocsum\Infrastructure\Responder\Concrete\TerminalResponder;
 
 include dirname(__DIR__ ) . '/vendor/autoload.php';
 
@@ -34,7 +37,7 @@ if ($argc === 1) {
     if (empty($size)) {
         $responder->respond('Size is required in MB');
     }
-    $size = (int) $size * 1024 * 1024;
+    $size = (int) ($size * 1024 * 1024);
 
     $type = FileOutputType::tryFrom($type);
     if (empty($type)) {
@@ -43,12 +46,15 @@ if ($argc === 1) {
     }
 
     $faker = Factory::create();
+    $faker->addProvider(new LargeTextProvider($faker));
     $contentProvider = new FakerContentProvider($faker);
+    $chunkEstimatorFactory = new ChunkEstimatorFactory();
+    $fileOutputTypeFactory = new FileOutputStrategyFactory($contentProvider, $chunkEstimatorFactory);
 
     $app = new BuildAction(
         responder: $responder,
         faker: $faker,
-        contentProvider: $contentProvider
+        fileOutputTypeFactory: $fileOutputTypeFactory
     );
 
     $app->run($size, $type);
